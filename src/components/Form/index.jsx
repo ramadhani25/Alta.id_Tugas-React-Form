@@ -2,70 +2,88 @@ import React, { useState } from "react";
 import style from "./style.module.css";
 
 const Form = ({ inputs, setInputs, register, setRegister }) => {
-  const regex = /^[A-Za-z ]*$/;
-  const [errMsg, setErrMsg] = useState("");
-
-  const handleInput = (value, key) => {
-    const newInputs = { ...inputs };
-    newInputs[key] = value;
-
-    if (key === "name") {
-      if (regex.test(value)) {
-        setErrMsg("");
-      } else {
-        setErrMsg("Input Harus Berupa Huruf.");
-      }
-    }
-
+  const textRegex = /^[a-zA-Z ]+$/;
+  const numRegex = /^[0-9]*$/;
+  const [errorList, setErrorList] = useState([]);
+  const handleInput = (value, i) => {
+    const newInputs = { ...inputs, [i]: value };
     setInputs(newInputs);
-    console.log(newInputs);
   };
 
   const handleSubmit = (e) => {
+    const error = [];
     e.preventDefault();
 
-    setRegister([...register, inputs]);
-    console.log(register);
+    const { name, email, phone, education, kelas, image } = inputs;
 
-    if (errMsg !== "") {
-      alert("Data Pendaftar Tidak Sesuai");
-    } else {
-      alert(`Data Pendaftar ${inputs.name} Berhasil Diterima`);
+    // Name
+    !textRegex.test(name) && error.push("Nama hanya boleh berupa huruf.");
+    name.length === 0 && error.push("Nama tidak boleh kosong.");
+
+    // Email
+    email.length === 0 && error.push("Email tidak boleh kosong.");
+
+    // Phone
+    !numRegex.test(phone) &&
+      error.push("No Handphone hanya boleh berupa angka.");
+    phone.length === 0 && error.push("No Handphone tidak boleh kosong.");
+
+    // Education
+    education === "" &&
+      error.push("Pilih salah satu Latar Belakang Pendidikan.");
+
+    // Kelas
+    kelas === "" && error.push("Pilih salah satu Kelas Coding.");
+
+    // Image
+    image === "" && error.push("Upload foto surat.");
+
+    if (error.length) {
+      setErrorList(error);
     }
 
-    setInputs({
-      name: "",
-      email: "",
-      phone: "",
-      education: "",
-      class: "",
-      image: "",
-      description: "",
-    });
+    if (error.length === 0) {
+      setRegister([...register, inputs]);
+      setInputs({
+        name: "",
+        email: "",
+        phone: "",
+        education: "",
+        kelas: "",
+        image: "",
+        description: "",
+      });
+      setErrorList([]);
+      alert(`Data Pendaftar ${inputs.name} Berhasil Diterima`);
+    } else {
+      alert(`Data Pendaftar Tidak Sesuai`);
+    }
   };
 
   const handleReset = (e) => {
-    e.preventDefault();
-    setInputs({
-      name: "",
-      email: "",
-      phone: "",
-      education: "",
-      class: "",
-      image: "",
-      description: "",
-    });
-    setErrMsg("");
+    setTimeout(() => {
+      e.preventDefault();
+      setInputs({
+        name: "",
+        email: "",
+        phone: "",
+        education: "",
+        kelas: "",
+        image: "",
+        description: "",
+      });
+      setErrorList([]);
+    }, 1);
   };
 
   return (
-    <div>
-      <h1>Pendaftaran Peserta Coding Bootcamp</h1>
-      <form className={style.form_container}>
-        <div className={style.input}>
+    <div className={style.form_container}>
+      <form onReset={handleReset}>
+        <div className={style.input_container}>
           <label>Nama</label>
           <br />
           <input
+            className={style.input}
             type="text"
             required
             placeholder="Masukkan Nama"
@@ -75,10 +93,11 @@ const Form = ({ inputs, setInputs, register, setRegister }) => {
           />
         </div>
 
-        <div className={style.input}>
+        <div className={style.input_container}>
           <label>Email</label>
           <br />
           <input
+            className={style.input}
             type="email"
             required
             placeholder="Masukkan Email"
@@ -88,11 +107,12 @@ const Form = ({ inputs, setInputs, register, setRegister }) => {
           />
         </div>
 
-        <div className={style.input}>
+        <div className={style.input_container}>
           <label>No Handphone</label>
           <br />
           <input
-            type="number"
+            className={style.input}
+            type="text"
             required
             minLength="9"
             maxLength="14"
@@ -103,32 +123,35 @@ const Form = ({ inputs, setInputs, register, setRegister }) => {
           />
         </div>
 
-        <div>
+        <div className={style.input_container}>
           <label>Latar Belakang Pendidikan</label>
           <br />
           <input
+            className={style.radio_btn}
             required
             type="radio"
             name="education"
             value="IT"
             onChange={(e) => handleInput(e.target.value, e.target.name)}
-          />{" "}
-          IT
+          />
+          {"IT"}
           <input
+            className={style.radio_btn}
             required
             type="radio"
             name="education"
             value="Non-IT"
             onChange={(e) => handleInput(e.target.value, e.target.name)}
-          />{" "}
-          Non IT
+          />
+          {"Non IT"}
         </div>
 
-        <div className={style.input}>
+        <div className={style.input_container}>
           <label>Kelas Coding yang Dipilih</label>
           <br />
           <select
-            name="class"
+            className={style.input}
+            name="kelas"
             required
             onChange={(e) => handleInput(e.target.value, e.target.name)}
           >
@@ -145,32 +168,42 @@ const Form = ({ inputs, setInputs, register, setRegister }) => {
           </select>
         </div>
 
-        <div className={style.input}>
+        <div className={style.input_container}>
           <label>Foto Surat Kesungguhan</label>
           <br />
           <input
+            className={style.input}
             type="file"
             required
             name="image"
-            onChange={(e) => handleInput(e.target.files[0], e.target.name)}
+            onChange={(e) => handleInput(e.target.files[0].name, e.target.name)}
           />
         </div>
 
-        <div className={style.input}>
+        <div className={style.input_container}>
           <label>Harapan Untuk Coding Bootcamp Ini</label>
           <br />
           <textarea
+            className={style.input}
             name="description"
             value={inputs.description}
             onChange={(e) => handleInput(e.target.value, e.target.name)}
           />
         </div>
 
-        <div style={{ color: "red", fontSize: "12px" }}>{errMsg}</div>
+        <div style={{ color: "red", fontSize: "12px", margin: "15px 20px" }}>
+          <ul>
+            {errorList.map((item, itemIdx) => (
+              <li key={itemIdx}>{item}</li>
+            ))}
+          </ul>
+        </div>
 
-        <div className={style.input}>
-          <button onClick={handleSubmit}>Submit</button>
-          <button onClick={handleReset}>Reset</button>
+        <div className={style.container_button}>
+          <button className={style.button} onClick={handleSubmit}>
+            Submit
+          </button>
+          <input className={style.button} type="reset" />
         </div>
       </form>
     </div>

@@ -8,7 +8,7 @@ function App() {
     email: "",
     phone: "",
     education: "",
-    class: "",
+    kelas: "",
     image: "",
     description: "",
   });
@@ -17,6 +17,7 @@ function App() {
 
   return (
     <div className="App">
+      <h1>Pendaftaran Peserta Coding Bootcamp</h1>
       <Form
         inputs={inputs}
         setInputs={setInputs}

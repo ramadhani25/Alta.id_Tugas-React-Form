@@ -1,20 +1,39 @@
 .form_container {
-    width: 80%;
+    width: 75%;
     margin: auto;
+    background-color: #EEEEEE;
+    padding: 30px;
+    border-radius: 20px;
 }
 
-.form_container .input input,
-select,
-textarea {
+.input_container {
     width: 100%;
-    padding: 8px;
+    margin: 20px 0 0;
+    color: #393E46;
 }
 
-.form_container .input {
-    margin: 20px 0;
+.input {
+    width: 100%;
+    padding: 12px 10px;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    margin: 10px 0 0;
 }
 
-.form_container .input button {
-    padding: 5px 15px;
-    margin: auto;
+.radio_btn {
+    margin: 10px 5px 0 10px;
+}
+
+.container_button {
+    margin: 20px 0 0;
+    text-align: center;
+}
+
+.button {
+    padding: 5px 20px;
+    margin: 0 10px;
+    border-radius: 10px;
+    color: #222831;
+    cursor: pointer;
 }
