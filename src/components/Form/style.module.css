@@ -1,0 +1,20 @@
+.form_container {
+    width: 80%;
+    margin: auto;
+}
+
+.form_container .input input,
+select,
+textarea {
+    width: 100%;
+    padding: 8px;
+}
+
+.form_container .input {
+    margin: 20px 0;
+}
+
+.form_container .input button {
+    padding: 5px 15px;
+    margin: auto;
+}
