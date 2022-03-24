@@ -27,6 +27,7 @@ const Form = ({ inputs, setInputs, register, setRegister }) => {
     !numRegex.test(phone) &&
       error.push("No Handphone hanya boleh berupa angka.");
     phone.length === 0 && error.push("No Handphone tidak boleh kosong.");
+    phone.length < 9 && error.push("No Handphone Kurang dari 9.");
 
     // Education
     education === "" &&
